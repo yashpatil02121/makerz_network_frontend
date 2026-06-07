@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import AddTemplateSectionsDialog from "../components/AddTemplateSectionsDialog";
+import ConfirmDeleteDialog from "../components/ConfirmDeleteDialog";
 
 interface ArtifactTemplate {
   id: string;
@@ -30,6 +31,10 @@ export default function ArtifactTemplateDetailsPage() {
   const [sections, setSections] = useState<TemplateSection[]>([]);
 
   const [showAddSectionsDialog, setShowAddSectionsDialog ] = useState(false);
+
+  const [showDeleteDialog,setShowDeleteDialog] = useState(false);
+
+  const [selectedSection,setSelectedSection] = useState<TemplateSection | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -91,6 +96,20 @@ export default function ArtifactTemplateDetailsPage() {
             onSuccess={fetchData}
             />
 
+            <ConfirmDeleteDialog
+                isOpen={showDeleteDialog}
+                tableName="artifact_template_sections"
+                recordId={selectedSection?.id || ""}
+                recordName={
+                    selectedSection?.section_name
+                }
+                onClose={() => {
+                    setShowDeleteDialog(false);
+                    setSelectedSection(null);
+                }}
+                onSuccess={fetchData}
+                />
+
       <div className="max-w-6xl mx-auto p-8">
 
         {/* Template Info */}
@@ -105,13 +124,21 @@ export default function ArtifactTemplateDetailsPage() {
             {template.description}
           </p>
 
-          <div className="mt-4">
+          <div className="mt-4 flex gap-4 w-full justify-between items-center">
 
             <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
               {template.target_role}
             </span>
+            
+            <button
+                className="bg-black text-white px-4 py-2 rounded-lg"
+                >
+                Artifacts
+            </button>
 
           </div>
+
+          
 
         </div>
 
@@ -169,7 +196,7 @@ export default function ArtifactTemplateDetailsPage() {
 
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 items-start">
 
                       {section.required && (
                         <span className="bg-red-100 text-red-700 px-2 py-1 rounded text-xs">
@@ -182,6 +209,18 @@ export default function ArtifactTemplateDetailsPage() {
                           AI Validation
                         </span>
                       )}
+
+                      <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+
+                            setSelectedSection(section);
+                            setShowDeleteDialog(true);
+                        }}
+                        className="bg-red-100 text-red-700 px-3 py-1 rounded text-xs"
+                        >
+                        Delete
+                        </button>
 
                     </div>
 
