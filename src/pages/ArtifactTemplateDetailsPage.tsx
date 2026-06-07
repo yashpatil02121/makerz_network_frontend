@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import AddTemplateSectionsDialog from "../components/AddTemplateSectionsDialog";
 
 interface ArtifactTemplate {
   id: string;
@@ -26,8 +27,9 @@ export default function ArtifactTemplateDetailsPage() {
   const [template, setTemplate] =
     useState<ArtifactTemplate | null>(null);
 
-  const [sections, setSections] =
-    useState<TemplateSection[]>([]);
+  const [sections, setSections] = useState<TemplateSection[]>([]);
+
+  const [showAddSectionsDialog, setShowAddSectionsDialog ] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -80,6 +82,14 @@ export default function ArtifactTemplateDetailsPage() {
 
   return (
     <div className="min-h-screen bg-slate-100">
+        <AddTemplateSectionsDialog
+            isOpen={showAddSectionsDialog}
+            templateId={template.id}
+            onClose={() =>
+                setShowAddSectionsDialog(false)
+            }
+            onSuccess={fetchData}
+            />
 
       <div className="max-w-6xl mx-auto p-8">
 
@@ -116,9 +126,12 @@ export default function ArtifactTemplateDetailsPage() {
             </h2>
 
             <button
-              className="bg-black text-white px-4 py-2 rounded-lg"
-            >
-              Add Section
+                onClick={() =>
+                    setShowAddSectionsDialog(true)
+                }
+                className="bg-black text-white px-4 py-2 rounded-lg"
+                >
+                Add Sections
             </button>
 
           </div>
