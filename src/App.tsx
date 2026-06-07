@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import PortfolioPage from "./pages/PortfolioPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PortfolioDetailsPage from "./pages/PortfolioDetailsPage";
+import ArtifactTemplateDetailsPage from "./pages/ArtifactTemplateDetailsPage";
 
 import { supabase } from "./lib/supabase";
 
@@ -82,6 +83,15 @@ function App() {
           element={
             <ProtectedRoute user={user}>
               <PortfolioDetailsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/artifact-templates/:templateId"
+          element={
+            <ProtectedRoute user={user}>
+              <ArtifactTemplateDetailsPage />
             </ProtectedRoute>
           }
         />

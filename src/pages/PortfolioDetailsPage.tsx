@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import CreateArtifactTemplateDialog from "../components/CreateArtifactTemplateDialog";
+import { useNavigate } from "react-router-dom";
 
 interface Portfolio {
   id: string;
@@ -38,6 +39,8 @@ export default function PortfolioDetailsPage() {
   const [templates, setTemplates] = useState<
     ArtifactTemplate[]
   >([]);
+
+  const navigate = useNavigate();
 
   const [
     showCreateTemplateDialog,
@@ -213,9 +216,14 @@ export default function PortfolioDetailsPage() {
 
               {templates.map((template) => (
                 <div
-                  key={template.id}
-                  className="border rounded-xl p-4"
-                >
+                    key={template.id}
+                    onClick={() =>
+                        navigate(
+                        `/artifact-templates/${template.id}`
+                        )
+                    }
+                    className="border rounded-xl p-4 cursor-pointer hover:shadow-lg transition"
+                    >
 
                   <h3 className="text-lg font-semibold">
                     {template.name}
