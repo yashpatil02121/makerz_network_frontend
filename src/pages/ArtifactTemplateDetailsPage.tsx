@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import AddTemplateSectionsDialog from "../components/AddTemplateSectionsDialog";
 import ConfirmDeleteDialog from "../components/ConfirmDeleteDialog";
+import { useNavigate } from "react-router-dom";
 
 interface ArtifactTemplate {
   id: string;
@@ -21,6 +22,9 @@ interface TemplateSection {
 }
 
 export default function ArtifactTemplateDetailsPage() {
+
+  const navigate = useNavigate();
+  
   const { templateId } = useParams();
 
   const [loading, setLoading] = useState(true);
@@ -131,10 +135,15 @@ export default function ArtifactTemplateDetailsPage() {
             </span>
             
             <button
+                onClick={() =>
+                    navigate(
+                    `/artifact-templates/${template.id}/artifacts`
+                    )
+                }
                 className="bg-black text-white px-4 py-2 rounded-lg"
                 >
                 Artifacts
-            </button>
+                </button>
 
           </div>
 
