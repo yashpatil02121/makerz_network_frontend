@@ -67,11 +67,15 @@ export default function CreatePortfolioDialog({
       }
 
       // creator becomes Product Owner
-      await supabase.from("portfolio_members").insert({
-        portfolio_id: portfolio.id,
-        user_id: user.id,
-        role: "Product Owner",
-      });
+      const { error: memberError } = await supabase
+        .from("portfolio_members")
+        .insert({
+            portfolio_id: portfolio.id,
+            user_id: user.id,
+            role: "Product Owner",
+        });
+
+        console.log(memberError);
 
       // future:
       // create invitations here
